@@ -1,328 +1,265 @@
-<!DOCTYPE html >
-    <html lang="en" >
-        <head>
-        <meta charset="UTF-8" >
-            <meta name="viewport" content = "width=device-width, initial-scale=1.0" >
-                <title>OFFSCRIPT | Join the Waitlist </title>
-                    < !--Tailwind CSS-- >
-                        <script src="https://cdn.tailwindcss.com" > </script>
-                            < !--React & ReactDOM-- >
-                            <script crossorigin src = "https://unpkg.com/react@18/umd/react.production.min.js" > </script>
-                                < script crossorigin src = "https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" > </script>
-                                    < !--Babel for JSX-- >
-                                        <script src= "https://unpkg.com/@babel/standalone/babel.min.js" > </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFFSCRIPT | Stop Waiting.</title>
+    
+    <!-- 1. Load Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- 3. Load Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 4. Load Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stone: { 950: '#050505', 900: '#121212', 800: '#27272a' },
+                        brand: { 500: '#ff3d00', 600: '#ea580c' }, // High-vis Orange
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Anton', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'marquee': 'marquee 15s linear infinite',
+                        'reveal': 'reveal 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        reveal: {
+                            '0%': { transform: 'translateY(100%)' },
+                            '100%': { transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-                                        < !--Custom Config for Tailwind-- >
-                                            <script>
-                                            tailwind.config = {
-                                                theme: {
-                                                    extend: {
-                                                        colors: {
-                                                            stone: {
-                                                                950: '#0c0a09',
-                                                                900: '#1c1917',
-                                                                800: '#292524',
-                                                            },
-                                                            orange: {
-                                                                500: '#f97316',
-                                                                600: '#ea580c',
-                                                            }
-                                                        },
-                                                        fontFamily: {
-                                                            sans: ['Inter', 'sans-serif'],
-                                                            mono: ['JetBrains Mono', 'monospace'],
-                                                        },
-                                                        animation: {
-                                                            'fade-in': 'fadeIn 0.5s ease-out',
-                                                            'slide-up': 'slideUp 0.5s ease-out',
-                                                        },
-                                                        keyframes: {
-                                                            fadeIn: {
-                                                                '0%': { opacity: '0' },
-                                                                '100%': { opacity: '1' },
-                                                            },
-                                                            slideUp: {
-                                                                '0%': { transform: 'translateY(10px)', opacity: '0' },
-                                                                '100%': { transform: 'translateY(0)', opacity: '1' },
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            </script>
-                                            <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
-        body { font - family: 'Inter', sans - serif; }
-</style>
-    </head>
-    < body class="bg-stone-950 text-stone-200 antialiased selection:bg-orange-500 selection:text-white" >
-        <div id="root" > </div>
+    <style>
+        body { background-color: #050505; color: #f4f4f5; }
+        
+        /* Outline Text Effect */
+        .text-outline {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+            color: transparent;
+            transition: all 0.3s ease;
+        }
+        .text-outline:hover {
+            -webkit-text-stroke: 1px #ff3d00;
+            color: rgba(255, 61, 0, 0.1);
+        }
 
-            < script type = "text/babel" >
+        /* Noise Texture */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 50; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        
+        /* Reveal Animation Mask */
+        .mask-container { overflow: hidden; }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
         const { useState, useEffect } = React;
 
-// --- Icons (Inline SVGs for portability) ---
-const Icon = ({ path, className }) => (
-    <svg xmlns= "http://www.w3.org/2000/svg" width = "24" height = "24" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" strokeWidth = "2" strokeLinecap = "round" strokeLinejoin = "round" className = { className } >
-        { path }
-        </svg>
-        );
-
-const Icons = {
-    Music: (props) => <Icon { ...props } path={<> <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/ > <circle cx="18" cy = "16" r="3" /> </>} / >,
-    Mic: (props) => <Icon { ...props } path={<> <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/ > <line x1="12" y1 = "19" x2="12" y2="23" /> <line x1="8" y1 = "23" x2="16" y2="23" /> </>} / >,
-    Palette: (props) => <Icon { ...props } path={<> <circle cx="13.5" cy = "6.5" r=".5" /> <circle cx="17.5" cy = "10.5" r=".5" /> <circle cx="8.5" cy = "7.5" r=".5" /> <circle cx="6.5" cy = "12.5" r=".5" /> <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></ >} />,
-    Beer: (props) => <Icon {...props } path = {<> <path d="M17 11h1a3 3 0 0 1 0 6h-1" /> <path d="M9 12v6" /> <path d="M13 12v6" /> <path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 2 11 2s2 1.5 3 1.5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.57-.5-2.5-.5z" /> <path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8" /> </>} / >,
-        CheckCircle: (props) => <Icon { ...props } path = {<> <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /> <polyline points="22 4 12 14.01 9 11.01" /> </>} / >,
-            ArrowRight: (props) => <Icon { ...props } path = {<> <line x1="5" y1 = "12" x2 = "19" y2 = "12" /> <polyline points="12 5 19 12 12 19" /> </>} / >,
-                Instagram: (props) => <Icon { ...props } path = {<> <rect x="2" y = "2" width = "20" height = "20" rx = "5" ry = "5" /> <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /> <line x1="17.5" y1 = "6.5" x2 = "17.51" y2 = "6.5" /> </>} / >,
-                    Sparkles: (props) => <Icon { ...props } path = {<> <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /> </>} / >,
+        // --- ICONS ---
+        const Icons = {
+            Arrow: ({className}) => <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>,
+            Star: ({className}) => <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
+            Music: ({className}) => <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>,
+            Mic: ({className}) => <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>,
+            Art: ({className}) => <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>,
+            Drink: ({className}) => <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 2 11 2s2 1.5 3 1.5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.57-.5-2.5-.5z"/><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/></svg>,
         };
 
-const JoinWaitlist = () => {
-    const [currentStep, setCurrentStep] = useState(0);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [formData, setFormData] = useState({
-        interests: [],
-        specificEvent: '',
-        name: '',
-        handle: '',
-        phone: ''
-    });
+        const App = () => {
+            const [step, setStep] = useState(0);
+            const [formData, setFormData] = useState({ interests: [], specificEvent: '', name: '', handle: '', phone: '' });
 
-    const toggleInterest = (id) => {
-        setFormData(prev => {
-            const exists = prev.interests.includes(id);
-            if (exists) return { ...prev, interests: prev.interests.filter(i => i !== id) };
-            return { ...prev, interests: [...prev.interests, id] };
-        });
-    };
+            const toggleInterest = (id) => {
+                setFormData(prev => ({
+                    ...prev,
+                    interests: prev.interests.includes(id) ? prev.interests.filter(i => i !== id) : [...prev.interests, id]
+                }));
+            };
 
-    const handleInput = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+            const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
+            const handleSubmit = (e) => { e.preventDefault(); setTimeout(() => setStep(2), 800); };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("🚀 New Waitlist Entry:", formData);
+            // Marquee Content
+            const marqueeText = " • CONCERTS • COMEDY • ART • TECHNO • WORKSHOPS • GURGAON • DELHI • NO FLAKES • FIND YOUR POD";
 
-        // --- INTEGRATION POINT ---
-        // To save data for free, you can use a service like 'EmailJS' or 'Google Sheets API' here.
-        // For now, we simulate success.
-        setTimeout(() => {
-            setIsSubmitted(true);
-        }, 800);
-    };
-
-    const categories = [
-        { id: 'concerts', label: 'Concerts & Gigs', icon: <Icons.Music className="w-5 h-5" /> },
-        { id: 'comedy', label: 'Comedy Shows', icon: <Icons.Mic className="w-5 h-5" /> },
-        { id: 'workshops', label: 'Workshops/Art', icon: <Icons.Palette className="w-5 h-5" /> },
-        { id: 'social', label: 'Drinks & Social', icon: <Icons.Beer className="w-5 h-5" /> },
-    ];
-
-    if (isSubmitted) {
-        return (
-            <div className= "min-h-screen bg-stone-950 text-white flex flex-col items-center justify-center p-6 text-center animate-fade-in" >
-            <div className="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mb-6 border border-green-500/20 shadow-[0_0_30px_-5px_rgba(34,197,94,0.3)]" >
-                <Icons.CheckCircle className="w-10 h-10" />
+            return (
+                <div className="min-h-screen relative flex flex-col font-sans">
+                    <div className="noise"></div>
+                    
+                    {/* Background Gradients */}
+                    <div className="fixed inset-0 z-0 pointer-events-none">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-600/10 rounded-full blur-[120px]"></div>
+                        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-900/10 rounded-full blur-[100px]"></div>
                     </div>
-                    < h2 className = "text-4xl font-bold mb-4 font-mono tracking-tighter" > YOU'RE IN.</h2>
-                        < p className = "text-stone-400 max-w-md mb-8 text-lg leading-relaxed" >
-                            We've added you to the curated list. <br/>
-                            Keep an eye on your Instagram DMs < span className = "text-white font-mono" > (@{ formData.handle }) </span>.
-            </p>
-            < button
-        onClick = {() => window.location.reload()}
-className = "text-stone-500 hover:text-white transition-colors underline underline-offset-4"
-    >
-    Back to home
-        </button>
-        </div>
-                );
-            }
 
-return (
-    <div className= "min-h-screen relative overflow-x-hidden animate-fade-in" >
+                    {/* Navbar */}
+                    <nav className="fixed top-0 w-full z-40 px-6 py-5 flex justify-between items-center bg-stone-950/80 backdrop-blur-md border-b border-white/5">
+                        <div className="flex items-center gap-2 group cursor-pointer">
+                            <div className="w-4 h-4 bg-brand-500 rounded-sm rotate-45 group-hover:rotate-90 transition-transform duration-500"></div>
+                            <span className="font-display text-2xl tracking-wide text-white">OFFSCRIPT</span>
+                        </div>
+                        <a href="https://instagram.com" className="text-xs font-mono text-stone-400 hover:text-brand-500 transition-colors">@GO.OFFSCRIPT</a>
+                    </nav>
 
-    {/* Background Ambience */ }
-    < div className = "fixed inset-0 z-0 overflow-hidden pointer-events-none" >
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-orange-600/10 rounded-full blur-[120px]" > </div>
-            < div className = "absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[100px]" > </div>
-                </div>
-
-{/* Navbar */ }
-<nav className="fixed top-0 w-full z-50 bg-stone-950/80 backdrop-blur-md border-b border-stone-800/50" >
-    <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between" >
-        <div className="text-xl font-bold font-mono tracking-tighter flex items-center gap-2 select-none" >
-            <div className="w-3 h-3 bg-orange-500 rounded-sm rotate-45" > </div>
-OFF < span className = "text-white" > SCRIPT </span>
-    </div>
-    < a href = "#" className = "text-stone-400 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium" >
-        <Icons.Instagram className="w-4 h-4" />
-            <span className="hidden sm:inline" > @go.offscript </span>
-                </a>
-                </div>
-                </nav>
-
-                < main className = "relative z-10 pt-32 pb-20 px-4 md:px-6 max-w-5xl mx-auto" >
-
-                    {/* Hero */ }
-                    < div className = "text-center max-w-2xl mx-auto mb-12" >
-                        <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-stone-800 rounded-full bg-stone-900/50 backdrop-blur-sm shadow-sm" >
-                            <Icons.Sparkles className="w-3 h-3 text-orange-500" />
-                                <span className="text-xs font-mono text-stone-300 uppercase tracking-wider" > Early Access: Delhi NCR </span>
+                    {/* Main Content */}
+                    <main className="flex-grow flex flex-col items-center justify-center pt-24 pb-12 relative z-10 w-full overflow-hidden">
+                        
+                        {/* ANIMATED HERO SECTION */}
+                        <div className={`w-full max-w-6xl mx-auto px-4 text-center mb-16 transition-all duration-700 ${step === 2 ? 'opacity-0 h-0' : 'opacity-100'}`}>
+                            
+                            {/* Beta Tag */}
+                            <div className="flex justify-center mb-8">
+                                <div className="mask-container">
+                                    <div className="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 flex items-center gap-2 animate-reveal" style={{animationDelay: '0.1s'}}>
+                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                        <span className="text-[10px] font-mono uppercase tracking-widest text-stone-300">Waitlist Open: Delhi NCR</span>
                                     </div>
-                                    < h1 className = "text-4xl md:text-6xl font-bold leading-tight tracking-tight mb-6 text-white" >
-                                        Life happens when you go < span className = "text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500" > Off - Script </span>.
-                                            </h1>
-                                            < p className = "text-lg text-stone-400 leading-relaxed max-w-lg mx-auto" >
-                                                Your friends flaked ? We curate groups for concerts, comedy, and workshops so you never have to miss out.
+                                </div>
+                            </div>
+
+                            {/* Massive Typography */}
+                            <h1 className="font-display text-6xl md:text-8xl lg:text-[10rem] leading-[0.85] uppercase tracking-tighter mb-8">
+                                <div className="mask-container">
+                                    <div className="animate-reveal" style={{animationDelay: '0.2s'}}>Stop Waiting</div>
+                                </div>
+                                <div className="mask-container">
+                                    <div className="animate-reveal text-outline" style={{animationDelay: '0.35s'}}>
+                                        For Your
+                                    </div>
+                                </div>
+                                <div className="mask-container">
+                                    <div className="animate-reveal text-brand-500" style={{animationDelay: '0.5s'}}>
+                                        Friends.
+                                    </div>
+                                </div>
+                            </h1>
+
+                            <p className="font-mono text-xs md:text-sm text-stone-400 max-w-md mx-auto uppercase tracking-wide leading-relaxed animate-reveal" style={{animationDelay: '0.7s'}}>
+                                The group chat is dead. The event is selling out. <br/>
+                                <span className="text-white border-b border-brand-500">We find your crew</span> for concerts, comedy, and culture.
                             </p>
-                                                    </div>
+                        </div>
 
-{/* Interactive Form Card */ }
-<div className="max-w-lg mx-auto bg-stone-900/60 backdrop-blur-xl border border-stone-800 rounded-2xl shadow-2xl overflow-hidden relative" >
+                        {/* FORM CARD */}
+                        {step < 2 && (
+                            <div className="w-full max-w-md px-4 animate-reveal" style={{animationDelay: '0.9s'}}>
+                                <div className="bg-stone-900/50 backdrop-blur-xl border border-white/10 p-1 rounded-3xl shadow-2xl">
+                                    <div className="bg-stone-950/80 rounded-[20px] p-6 border border-white/5 relative overflow-hidden">
+                                        <div className="absolute top-0 left-0 h-0.5 bg-brand-500 transition-all duration-500" style={{width: step === 0 ? '50%' : '100%'}}></div>
+                                        
+                                        <form onSubmit={handleSubmit}>
+                                            {/* Step 0: Vibe */}
+                                            <div className={step === 0 ? 'block' : 'hidden'}>
+                                                <div className="flex justify-between items-end mb-6">
+                                                    <h3 className="font-display text-2xl uppercase text-white">Choose Vibe</h3>
+                                                    <span className="font-mono text-[10px] text-stone-500">STEP 01</span>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-2 mb-4">
+                                                    {[
+                                                        {id: 'concerts', label: 'Concerts', icon: Icons.Music},
+                                                        {id: 'comedy', label: 'Comedy', icon: Icons.Mic},
+                                                        {id: 'workshops', label: 'Workshops', icon: Icons.Art},
+                                                        {id: 'social', label: 'Social', icon: Icons.Drink}
+                                                    ].map(cat => (
+                                                        <button key={cat.id} type="button" onClick={() => toggleInterest(cat.id)}
+                                                            className={`p-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all duration-200
+                                                            ${formData.interests.includes(cat.id) ? 'bg-white text-black border-white' : 'bg-stone-900 border-stone-800 text-stone-500 hover:border-stone-600 hover:text-stone-300'}`}>
+                                                            <cat.icon className="w-6 h-6" />
+                                                            <span className="font-mono text-[10px] uppercase tracking-wider">{cat.label}</span>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                <input type="text" name="specificEvent" value={formData.specificEvent} onChange={handleChange} placeholder="Specific event? (Optional)"
+                                                    className="w-full bg-stone-900 border border-stone-800 focus:border-brand-500 rounded-lg p-3 text-sm text-white outline-none mb-4 font-mono placeholder-stone-700" />
+                                                <button type="button" onClick={() => setStep(1)} disabled={formData.interests.length === 0}
+                                                    className="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold h-12 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-sm">
+                                                    Next <Icons.Arrow className="w-4 h-4" />
+                                                </button>
+                                            </div>
 
-    {/* Progress Bar */ }
-    < div className = "h-1 bg-stone-800 w-full" >
-        <div 
-                                    className="h-full bg-orange-500 transition-all duration-500 ease-out"
-style = {{ width: currentStep === 0 ? '50%' : '100%' }}
-                                > </div>
-    </div>
+                                            {/* Step 1: Details */}
+                                            <div className={step === 1 ? 'block' : 'hidden'}>
+                                                <div className="flex justify-between items-end mb-6">
+                                                    <h3 className="font-display text-2xl uppercase text-white">Your Details</h3>
+                                                    <span className="font-mono text-[10px] text-stone-500">STEP 02</span>
+                                                </div>
+                                                <div className="space-y-3 mb-6">
+                                                    <input required type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name"
+                                                        className="w-full bg-stone-900 border border-stone-800 focus:border-brand-500 rounded-lg p-3 text-sm text-white outline-none font-mono" />
+                                                    <input required type="text" name="handle" value={formData.handle} onChange={handleChange} placeholder="@Instagram_Handle"
+                                                        className="w-full bg-stone-900 border border-stone-800 focus:border-brand-500 rounded-lg p-3 text-sm text-white outline-none font-mono" />
+                                                    <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="WhatsApp Number"
+                                                        className="w-full bg-stone-900 border border-stone-800 focus:border-brand-500 rounded-lg p-3 text-sm text-white outline-none font-mono" />
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <button type="button" onClick={() => setStep(0)} className="px-4 py-3 rounded-lg border border-stone-800 text-stone-500 hover:text-white hover:border-stone-600 transition-colors"><Icons.Arrow className="w-4 h-4 rotate-180"/></button>
+                                                    <button type="submit" className="flex-1 bg-white hover:bg-stone-200 text-black font-bold h-12 rounded-lg transition-colors uppercase tracking-wider text-sm shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)]">
+                                                        Join The Pod
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
-    < div className = "p-6 md:p-8" >
-        <form onSubmit={ handleSubmit }>
+                        {/* SUCCESS STATE */}
+                        {step === 2 && (
+                            <div className="w-full max-w-md text-center px-4 animate-reveal">
+                                <div className="inline-block p-4 rounded-full bg-brand-600/20 text-brand-500 mb-6 border border-brand-500/50">
+                                    <Icons.Star className="w-8 h-8" />
+                                </div>
+                                <h2 className="font-display text-6xl uppercase mb-2 text-white">You're In.</h2>
+                                <p className="text-stone-400 font-mono text-sm mb-8">We're verifying your vibe. <br/> Check your DMs shortly.</p>
+                                <button onClick={() => window.location.reload()} className="text-stone-500 hover:text-white underline underline-offset-4 text-xs font-mono uppercase tracking-widest">Back to Start</button>
+                            </div>
+                        )}
 
-            {/* STEP 1 */ }
-            < div className = { currentStep === 0 ? 'block animate-slide-up' : 'hidden'}>
-                <h3 className="text-xl font-bold text-white mb-1" > What's your vibe?</h3>
-                    < p className = "text-sm text-stone-500 mb-6" > Select what you're into. We'll match you with a crew.</p>
+                    </main>
 
-                        < div className = "grid grid-cols-1 gap-3 mb-6" >
-                        {
-                            categories.map((cat) => (
-                                <button
-                                                    key= { cat.id }
-                                                    type = "button"
-                                                    onClick = {() => toggleInterest(cat.id)}
-className = {`flex items-center p-4 rounded-xl border transition-all duration-200 text-left group
-                                                    ${formData.interests.includes(cat.id)
-        ? 'bg-orange-500/10 border-orange-500/50 text-white shadow-[0_0_15px_-5px_rgba(249,115,22,0.3)]'
-        : 'bg-stone-950/50 border-stone-800 text-stone-400 hover:border-stone-700 hover:bg-stone-900'
-    }`}
-                                                >
-    <div className={ `mr-4 p-2 rounded-lg transition-colors ${formData.interests.includes(cat.id) ? 'bg-orange-500 text-white' : 'bg-stone-800 text-stone-500 group-hover:text-stone-300'}` }>
-        { cat.icon }
-        </div>
-        < span className = "font-medium flex-1" > { cat.label } </span>
-{ formData.interests.includes(cat.id) && <Icons.CheckCircle className="w-5 h-5 text-orange-500" />}
-</button>
-                                            ))}
-</div>
-
-    < div className = "space-y-2" >
-        <label className="text-xs font-mono uppercase text-stone-500 tracking-wider" > Specific Event ? (Optional) </label>
-            < input
-                                                type = "text"
-name = "specificEvent"
-value = { formData.specificEvent }
-onChange = { handleInput }
-placeholder = "e.g. Diljit Concert, Pottery Workshop..."
-className = "w-full bg-stone-950 border border-stone-800 rounded-lg px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-orange-500/50 transition-colors"
-    />
-    </div>
-
-    < button
-type = "button"
-onClick = {() => setCurrentStep(1)}
-disabled = { formData.interests.length === 0 }
-className = "w-full mt-6 bg-white hover:bg-stone-200 text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform active:scale-[0.98]"
-    >
-    Next Step < Icons.ArrowRight className = "w-4 h-4" />
-        </button>
-        </div>
-
-{/* STEP 2 */ }
-<div className={ currentStep === 1 ? 'block animate-slide-up' : 'hidden' }>
-    <button 
-                                            type="button"
-onClick = {() => setCurrentStep(0)}
-className = "text-xs text-stone-500 hover:text-stone-300 mb-4 flex items-center gap-1"
-    >
-                                            ← Back to interests
-    </button>
-
-    < h3 className = "text-xl font-bold text-white mb-1" > The final details.</h3>
-        < p className = "text-sm text-stone-500 mb-6" > We need these to verify you're real. No creeps.</p>
-
-            < div className = "space-y-4 mb-8" >
-                <div>
-                <label className="block text-xs font-mono uppercase text-stone-500 mb-1.5" > Full Name </label>
-                    < input
-required
-type = "text"
-name = "name"
-value = { formData.name }
-onChange = { handleInput }
-className = "w-full bg-stone-950 border border-stone-800 rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:outline-none focus:ring-1 focus:ring-orange-500/20 transition-all"
-    />
-    </div>
-
-    < div >
-    <label className="block text-xs font-mono uppercase text-stone-500 mb-1.5" > Instagram Handle </label>
-        < div className = "relative" >
-            <span className="absolute left-4 top-3.5 text-stone-500" > @</span>
-                < input
-required
-type = "text"
-name = "handle"
-value = { formData.handle }
-onChange = { handleInput }
-placeholder = "username"
-className = "w-full bg-stone-950 border border-stone-800 rounded-lg pl-8 pr-4 py-3 text-white focus:border-orange-500/50 focus:outline-none focus:ring-1 focus:ring-orange-500/20 transition-all"
-    />
-    </div>
-    </div>
-
-    < div >
-    <label className="block text-xs font-mono uppercase text-stone-500 mb-1.5" > WhatsApp Number </label>
-        < input
-required
-type = "tel"
-name = "phone"
-value = { formData.phone }
-onChange = { handleInput }
-className = "w-full bg-stone-950 border border-stone-800 rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:outline-none focus:ring-1 focus:ring-orange-500/20 transition-all"
-    />
-    </div>
-    </div>
-
-    < button
-type = "submit"
-className = "w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_-5px_rgba(234,88,12,0.4)] transform active:scale-[0.98]"
-    >
-    Join Waitlist
-        </button>
-        </div>
-
-        </form>
-        </div>
-        </div>
-
-        </main>
-
-        < footer className = "py-8 text-center" >
-            <p className="text-stone-700 text-xs font-mono tracking-wider" >© 2024 OFFSCRIPT.NEW DELHI.</p>
-                </footer>
+                    {/* SCROLLING MARQUEE FOOTER */}
+                    <div className="fixed bottom-0 w-full bg-brand-600 py-2 overflow-hidden z-30 transform rotate-1 scale-105 origin-bottom-left border-t border-black">
+                        <div className="whitespace-nowrap animate-marquee">
+                            <span className="font-display text-black text-lg tracking-widest mx-4">{marqueeText.repeat(10)}</span>
+                        </div>
+                    </div>
                 </div>
             );
         };
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<JoinWaitlist />);
-</script>
-    </body>
-    </html>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
